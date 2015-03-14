@@ -3,7 +3,7 @@
 # ICC Calculation Script
 
 # set working directory
-# setwd("./Data")
+setwd("./Data")
 
 library(stringr)
 library(ICC)
