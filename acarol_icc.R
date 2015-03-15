@@ -3,6 +3,7 @@
 # ICC Calculation Script
 
 # set working directory
+setwd("") #current directory
 setwd("./Data")
 
 library(stringr)
@@ -24,7 +25,7 @@ data$name.strip = str_sub(data$Observation.Number, start=0, end=6)
 # load in full dataset
 morph <- read.csv("Acar_morph_data_M_final.csv", header = TRUE)
 # check overlap with actual dataset
-keep = intersect(unique(male_morph$Observation.Number), unique(data$name.strip))
+keep = intersect(unique(morph$Observation.Number), unique(data$name.strip))
 # limit to these individuals
 data = data[data$name.strip %in% keep,]
 # cast as numeric for each column
