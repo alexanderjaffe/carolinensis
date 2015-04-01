@@ -11,7 +11,6 @@ library(ggsubplot)
 library(plyr)
 library(mapproj)
 library(maps)
-library(RColorBrewer)
 library(reshape)
 library(stringr)
 library(ICC)
@@ -54,9 +53,9 @@ names(logmorph)[1] = "Observation.Number"
 ## SECTION 3.1 - GEOGRAPHIC VARIATION IN MORPHOLOGY
 
 # Figure 4ab - snout vent length and exemplar traits
-line = coef(lm(Femur ~ Snout.Vent.Length, data = logmorph))
+line1 = coef(lm(Femur ~ Snout.Vent.Length, data = logmorph))
 f = ggplot(data=logmorph,aes(x = Snout.Vent.Length, y=Femur, color=Site)) + 
-  geom_point(size=4) + geom_abline(intercept = line[1], slope=line[2], color='black') + 
+  geom_point(size=4) + geom_abline(intercept = line1[1], slope=line1[2], color='black') + 
   scale_color_manual(values=c25) + theme(axis.text = element_text(size=13), 
   axis.title = element_text(size=14), legend.text=element_text(size=12), 
   legend.title = element_text(size=12)) + xlab("Snout Vent Length (ln mm)") + 
@@ -232,7 +231,7 @@ pops = male_temp$City
 veggie.combine = veggie.combine[veggie.combine$City %in% pops,]
 veg_subset = data.frame(cbind(veggie.combine$NDVI, as.character(veggie.combine$City)))
 names(veg_subset) = c("NDVI", "City")
-veg_subset$NDVI = as.numeric(as.character(veg_subset$NDVI)
+veg_subset$NDVI = as.numeric(as.character(veg_subset$NDVI))
                              
 ## create a final dataframe for regressions
 male.master = cbind(male_temp[,2:4], male_svl_avg[,2], pop_pca_means[,2:4],
@@ -361,6 +360,9 @@ grid.arrange(temp, lat, ncol=2)
 # calculate coefficients for these two regressions with MCMCglmm
 coefs_full = summary(MCMCglmm(Full2~Latitude, random = ~idv(Msvd), 
   data = male.master, verbose=F))$solutions
+# use prior if necessary
+#coefs_full = summary(MCMCglmm(Full2~Latitude, random = ~idv(Msvd), 
+  #data = male.master, verbose=F, prior=prior))$solutions
 coefs_limb = summary(MCMCglmm(Limb1~Latitude, random = ~idv(Msvd), 
   data = male.master, verbose=F))$solutions
 # now plot
